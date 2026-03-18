@@ -57,7 +57,7 @@ def carregar_dados():
 
 df = carregar_dados()
 
-st.title("Mapa Profissional de Ligações")
+st.title("Mapa Região Oeste de Ligações")
 
 with st.sidebar:
     st.header("Filtros")
