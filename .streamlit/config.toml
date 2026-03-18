@@ -1,0 +1,7 @@
+[server]
+# Community Cloud roda atrás de proxy; isso evita warnings.
+enableCORS = false
+enableXsrfProtection = true
+
+[theme]
+base = "light"

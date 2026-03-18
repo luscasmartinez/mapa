@@ -1,7 +1,9 @@
+from pathlib import Path
+
 import pandas as pd
-import streamlit as st
 import pydeck as pdk
 import pyrebase
+import streamlit as st
 
 st.set_page_config(page_title="Mapa de Ligações", layout="wide")
 
@@ -31,9 +33,9 @@ if not st.session_state.logged_in:
 
 # Código do app principal
 
-ARQUIVO = "dados_mapa.parquet"
+ARQUIVO = Path(__file__).resolve().parent / "dados_mapa.parquet"
 
-@st.cache_resource
+@st.cache_data(show_spinner="Carregando dados…")
 def carregar_dados():
     df = pd.read_parquet(ARQUIVO)
 
@@ -73,6 +75,10 @@ def carregar_dados():
     }
 
     df["cor"] = df["CLASSE_MAPA"].map(mapa_cores)
+
+    # Evita chaves com espaços/símbolos em tooltip e seleção de colunas
+    if "NOM_BAIRRO - CIDADE" in df.columns and "NOM_BAIRRO_CIDADE" not in df.columns:
+        df["NOM_BAIRRO_CIDADE"] = df["NOM_BAIRRO - CIDADE"]
 
     return df
 
@@ -137,7 +143,7 @@ tooltip = {
     "html": """
     <b>Ligação:</b> {NUM_LIGACAO}<br/>
     <b>Cidade:</b> {CIDADE}<br/>
-    <b>Bairro:</b> {NOM_BAIRRO - CIDADE}<br/>
+    <b>Bairro:</b> {NOM_BAIRRO_CIDADE}<br/>
     <b>Tipo:</b> {TIPO_FATURAMENTO}<br/>
     <b>GC:</b> {GC}
     """,
@@ -183,7 +189,7 @@ st.pydeck_chart(deck, use_container_width=True)
 st.subheader("Dados filtrados")
 st.dataframe(
     df_filtrado[
-        ["NUM_LIGACAO", "CIDADE", "NOM_BAIRRO - CIDADE", "TIPO_FATURAMENTO", "GC"]
+        ["NUM_LIGACAO", "CIDADE", "NOM_BAIRRO_CIDADE", "TIPO_FATURAMENTO", "GC"]
     ],
     use_container_width=True,
     height=400

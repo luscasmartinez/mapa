@@ -5,7 +5,7 @@ __pycache__/
 .Python
 
 # Streamlit
-.streamlit/
+.streamlit/secrets.toml
 
 # Ambiente virtual
 venv/
