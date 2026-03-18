@@ -1,0 +1,8 @@
+# Core
+streamlit==1.44.1
+pandas==2.2.0
+pydeck==0.8.0
+
+# Firebase
+pyrebase4==4.7.1
+requests==2.31.0
